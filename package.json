@@ -1,0 +1,25 @@
+{
+  "name": "react",
+  "version": "1.0.0",
+  "description": "My first React application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jerometrie/reactApp.git"
+  },
+  "keywords": [
+    "react",
+    "gulp",
+    "es2015",
+    "babel"
+  ],
+  "author": "jerome",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jerometrie/reactApp/issues"
+  },
+  "homepage": "https://github.com/jerometrie/reactApp#readme"
+}

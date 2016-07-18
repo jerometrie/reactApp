@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/jerometrie/reactApp/issues"
   },
-  "homepage": "https://github.com/jerometrie/reactApp#readme"
+  "homepage": "https://github.com/jerometrie/reactApp#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.9.0"
+  }
 }

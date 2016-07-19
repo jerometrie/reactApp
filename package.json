@@ -30,5 +30,8 @@
     "gulp": "^3.9.1",
     "json-server": "^0.8.16",
     "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "xss-filters": "^1.2.6"
   }
 }

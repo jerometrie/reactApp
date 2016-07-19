@@ -1108,13 +1108,21 @@ var _ui = require("./ui");
 
 var _ui2 = _interopRequireDefault(_ui);
 
+var _user = require("./user");
+
+var _user2 = _interopRequireDefault(_user);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _post2.default.findAll().then(_ui2.default.renderPosts).catch(function (error) {
 	console.log(error);
 });
 
-},{"./post":3,"./ui":4}],3:[function(require,module,exports){
+_user2.default.findRecent().then(_ui2.default.renderUsers).catch(function (error) {
+	console.log(error);
+});
+
+},{"./post":3,"./ui":4,"./user":5}],3:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1168,6 +1176,17 @@ var ui = {
 
 		var target = document.querySelector(".container");
 		target.innerHTML = elements.join("");
+	},
+	renderUsers: function renderUsers(users) {
+		var elements = users.map(function (user) {
+			var name = user.name;
+			var avatar = user.avatar;
+
+			return userTemplate(name, avatar);
+		});
+
+		var target = document.querySelector(".sidebar-content");
+		target.innerHTML = elements.join("");
 	}
 };
 
@@ -1178,6 +1197,43 @@ function articleTemplate(title, author) {
 	return template;
 }
 
+function userTemplate(name, avatar) {
+	var safeName = _xssFilters2.default.inHTMLData(name);
+	var safeAvatar = _xssFilters2.default.inHTMLData(avatar);
+	var template = "<div class=\"active-avatar\">\n\t\t<img width=\"54\" src=\"assets/images/" + safeAvatar + "\" />\n\t\t<h5 class=\"post-author\">" + safeName + "</h5>\n\t</div>";
+	return template;
+}
+
 exports.default = ui;
 
-},{"xss-filters":1}]},{},[2]);
+},{"xss-filters":1}],5:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var User = {
+	findRecent: function findRecent() {
+		return new Promise(function (resolve, reject) {
+			var uri = "http://localhost:3000/activeUsers";
+			var request = new XMLHttpRequest();
+
+			request.open("GET", uri, true);
+			request.onload = function () {
+				if (request.status >= 200 && request.status < 400) {
+					resolve(JSON.parse(request.response));
+				}
+			};
+
+			request.onerror = function () {
+				reject(new Error("Something went wrong retrieving users"));
+			};
+
+			request.send();
+		});
+	}
+};
+
+exports.default = User;
+
+},{}]},{},[2]);

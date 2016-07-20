@@ -1100,6 +1100,36 @@ exports.uriFragmentInHTMLComment = exports.uriComponentInHTMLComment;
 },{}],2:[function(require,module,exports){
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+var API = {
+	fetch: function fetch(path) {
+		return new Promise(function (resolve, reject) {
+			var uri = "http://localhost:3000/" + path;
+			var request = new XMLHttpRequest();
+
+			request.open("GET", uri, true);
+			request.onload = function () {
+				if (request.status >= 200 && request.status < 400) {
+					resolve(JSON.parse(request.response));
+				}
+			};
+
+			request.onerror = function () {
+				reject(new Error("Something went wrong"));
+			};
+
+			request.send();
+		});
+	}
+};
+
+exports.default = API;
+
+},{}],3:[function(require,module,exports){
+"use strict";
+
 var _post = require("./post");
 
 var _post2 = _interopRequireDefault(_post);
@@ -1122,37 +1152,28 @@ _user2.default.findRecent().then(_ui2.default.renderUsers).catch(function (error
 	console.log(error);
 });
 
-},{"./post":3,"./ui":4,"./user":5}],3:[function(require,module,exports){
+},{"./post":4,"./ui":5,"./user":6}],4:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _API = require("./API");
+
+var _API2 = _interopRequireDefault(_API);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var Post = {
 	findAll: function findAll() {
-		return new Promise(function (resolve, reject) {
-			var uri = "http://localhost:3000/posts";
-			var request = new XMLHttpRequest();
-
-			request.open("GET", uri, true);
-			request.onload = function () {
-				if (request.status >= 200 && request.status < 400) {
-					resolve(JSON.parse(request.response));
-				}
-			};
-
-			request.onerror = function () {
-				reject(new Error("Something went wrong"));
-			};
-
-			request.send();
-		});
+		return _API2.default.fetch("posts");
 	}
 };
 
 exports.default = Post;
 
-},{}],4:[function(require,module,exports){
+},{"./API":2}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1193,47 +1214,38 @@ var ui = {
 function articleTemplate(title, author) {
 	var safeTitle = _xssFilters2.default.inHTMLData(title);
 	var safeAuthor = _xssFilters2.default.inHTMLData(author);
-	var template = "<article class=\"post\">\n\t\t<h2 class=\"post-title\">" + safeTitle + "</h2>\n\t\t<p class=\"post-meta\">" + safeAuthor + "</p>\n\t</article>";
+	var template = "<article class=\"post\">\n\t\t\t<h2 class=\"post-title\">" + safeTitle + "</h2>\n\t\t\t<p class=\"post-meta\">" + safeAuthor + "</p>\n\t\t</article>";
 	return template;
 }
 
 function userTemplate(name, avatar) {
 	var safeName = _xssFilters2.default.inHTMLData(name);
 	var safeAvatar = _xssFilters2.default.inHTMLData(avatar);
-	var template = "<div class=\"active-avatar\">\n\t\t<img width=\"54\" src=\"assets/images/" + safeAvatar + "\" />\n\t\t<h5 class=\"post-author\">" + safeName + "</h5>\n\t</div>";
+	var template = "<div class=\"active-avatar\">\n\t\t\t<img width=\"54\" src=\"assets/images/" + safeAvatar + "\" />\n\t\t\t<h5 class=\"post-author\">" + safeName + "</h5>\n\t\t</div>";
 	return template;
 }
 
 exports.default = ui;
 
-},{"xss-filters":1}],5:[function(require,module,exports){
+},{"xss-filters":1}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _API = require("./API");
+
+var _API2 = _interopRequireDefault(_API);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var User = {
 	findRecent: function findRecent() {
-		return new Promise(function (resolve, reject) {
-			var uri = "http://localhost:3000/activeUsers";
-			var request = new XMLHttpRequest();
-
-			request.open("GET", uri, true);
-			request.onload = function () {
-				if (request.status >= 200 && request.status < 400) {
-					resolve(JSON.parse(request.response));
-				}
-			};
-
-			request.onerror = function () {
-				reject(new Error("Something went wrong retrieving users"));
-			};
-
-			request.send();
-		});
+		return _API2.default.fetch("activeUsers");
 	}
 };
 
 exports.default = User;
 
-},{}]},{},[2]);
+},{"./API":2}]},{},[3]);
